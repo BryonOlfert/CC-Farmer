@@ -1,0 +1,425 @@
+--[[
+IC2 Farmer Turtle api
+GPS Turtle api
+Bryon Olfert
+9/5/2018
+--]]
+
+
+function checkfuel()
+ if turtle.getFuelLevel() == 0 then
+  turtle.select(3)
+  if turtle.detectUp() == false then
+   turtle.placeUp()
+   turtle.suckUp()
+   turtle.refuel()
+   turtle.digUp()
+  elseif turtle.detect == false then
+   turtle.place()
+   turtle.suck()
+   turtle.refuel()
+   turtle.dig()
+  elseif turtle.detect == false then
+   turtle.placeDown()
+   turtle.suckDown()
+   turtle.refuel()
+   turtle.digDown()
+  else
+   check = true
+   back = norm
+   while check == true do
+	tr()
+	check = turtle.detect()
+   end
+   turtle.place()
+   turtle.suck()
+   turtle.refuel()
+   turtle.dig()
+   while norm ~= back do
+    tr()
+   end
+  end
+ end
+end
+
+function diagnostics(val)
+ checkfuel()
+ if val == "Zd" then
+  check = turtle.detectUp()
+ elseif val == "Yd" then
+  check = turtle.detect() 
+  if check == true then 
+   if norm == 4 then
+    tr()
+	while turtle.forward() == false do      
+	 sleep(0.0001)
+	 check = turtle.detect()
+     if check == true then                     
+      tr()
+	  while turtle.forward() == false do      
+	   sleep(0.0001)
+       check = turtle.detect()
+       if check == true then                     
+        tr()
+	    while turtle.forward() == false do      
+	     sleep(0.0001)
+		end
+		Xc = Xc - 1
+		tl()
+		update()
+		relocateX = true
+	   end
+	  end
+     end   
+     Yc = Yc + 1
+     i = i - 1
+     tl()
+     update()
+     check = turtle.detect()
+     end		 
+   Xc = Xc + 1
+   tl()
+   update()
+   check = turtle.detect()
+   relocateX = true
+  else 
+   tr()
+	while turtle.forward() == false do      
+	 sleep(0.0001)
+	 check = turtle.detect()
+    if check == true then                     
+     tr()
+	 while turtle.forward() == false do      
+	  sleep(0.0001)
+	  if check == true then                     
+       tr()
+	   while turtle.forward() == false do      
+	    sleep(0.0001)
+	   end
+      end   
+	 Xc = Xc + 1
+	 tl()
+	 update()
+	 relocateX = true
+	 end
+    end   
+    Yc = Yc - 1
+    i = i - 1
+    tl()
+    update()
+    check = turtle.detect()
+    end		 
+   Xc = Xc - 1
+   tl()
+   update()
+   check = turtle.detect()
+   relocateX = true
+  end
+  end
+ else
+ check = turtle.detect()
+  if check == true then
+   if norm == 3 then
+    tr()
+	while turtle.forward() == false do      
+	 sleep(0.0001)
+	 check = turtle.detect()
+    if check == true then                     
+     tr()
+	 while turtle.forward() == false do      
+	  sleep(0.0001)
+      check = turtle.detect()
+       if check == true then                     
+        tr()
+	    while turtle.forward() == false do      
+	     sleep(0.0001)
+        end
+       end
+		Yc = Yc - 1
+		check = false
+		tl()
+		update()
+		relocateY = true
+	 end
+    end   
+    Xc = Xc - 1
+    i = i - 1
+    tl()
+    update()
+    check = turtle.detect()
+    end		 
+   Yc = Yc + 1
+   tl()
+   update()
+   relocateY = true
+  else 
+   tr()
+	while turtle.forward() == false do      
+	 sleep(0.0001)
+	 check = turtle.detect()
+    if check == true then                     
+     tr()
+	 while turtle.forward() == false do      
+	  sleep(0.0001)
+	  check = turtle.detect()
+       if check == true then                     
+        tr()
+	    while turtle.forward() == false do      
+	     sleep(0.0001)
+        end
+       end
+		Yc = Yc + 1
+		check = false
+		tl()
+		update()
+		relocateY = true
+     end
+    end   
+    Xc = Xc + 1
+    i = i - 1
+    tl()
+    update()
+    check = turtle.detect()
+    end		 
+   Yc = Yc - 1
+   tl()
+   update()
+   relocateY = true
+  end
+  end
+ end
+end
+
+function down(d)
+for i=1, d do
+  while turtle.down() == false do
+    diagnostics()
+  end
+  Zc = Zc - 1
+end
+end
+
+function forward(distance)
+ for i=1, distance do
+  while turtle.forward() == false do
+    diagnostics()
+  end
+  if norm == 4 then
+   Yc = Yc + 1
+  elseif norm == 3 then
+   Xc = Xc + 1
+  elseif norm == 2 then
+   Yc = Yc - 1
+  else
+   Xc = Xc - 1
+  end
+ end
+end
+
+function GPSLOAD()
+ cfile = fs.open("X", "r")
+ Xc = cfile.readAll() + 0
+ cfile.close()
+ cfile = fs.open("Y", "r")
+ Yc = cfile.readAll() + 0
+ cfile.close()
+ cfile = fs.open("Z", "r")
+ Zc = cfile.readAll() + 0
+ cfile.close()
+ cfile = fs.open("Norm", "r")
+ norm = cfile.readAll() + 0
+ cfile.close()
+end
+
+
+function tl()
+ turtle.turnLeft()
+  if norm == 4 then
+   norm = 1
+  elseif norm == 1 then
+   norm = 2   
+  elseif norm == 2 then
+   norm = 3
+  else
+  norm = 4
+ end
+ update()
+end
+
+function tr()
+ turtle.turnRight()
+ if norm == 4 then
+  norm = 3
+ elseif norm == 3 then
+  norm = 2 
+ elseif norm == 2 then
+  norm = 1
+ else
+  norm = 4
+ end
+ update()
+end
+
+function up(d)
+for i=1, d do
+  while turtle.up() == false do
+    diagnostics()
+  end
+  Zc = Zc + 1
+end
+end
+
+function update() 
+ cfile = fs.open("X", "w")
+ cfile.write(Xc)
+ cfile.close()
+ cfile = fs.open("Y", "w")
+ cfile.write(Yc)
+ cfile.close()
+ cfile = fs.open("Z", "w")
+ cfile.write(Zc)
+ cfile.close()
+ cfile = fs.open("Norm", "w")
+ cfile.write(norm)
+ cfile.close()
+end
+
+function write(say)
+ term.clear()
+ term.setCursorPos(1,1)
+ print(say)
+end
+
+function Xtrav(Xf)
+if Xf == nil then
+   Xt = X - Xc
+  else 
+   Xf = X
+   Xt = X - Xc
+  end 
+ if Xt == 0 then
+  sleep(0.000001)
+ elseif X+0 > Xc+0 then
+  if norm == 2 then
+   tl()
+  end
+  while norm ~= 3 do
+   tr()
+  end
+  i = 0 
+  while i ~= math.abs(Xt) do
+   while turtle.forward() == false do
+    sleep(0.001)
+	diagnostics("Xd")
+   end
+   Xc = Xc + 1
+   update()
+   i = i + 1
+  end
+ elseif X+0 < Xc+0 then
+  if norm == 4 then
+   tl()
+  end
+  while norm ~= 1 do
+   tr()
+  end
+  i = 0
+  while i ~= math.abs(Xt) do 
+   while turtle.forward() == false do
+    sleep(0.001)
+	diagnostics("Xd")
+   end
+   Xc = Xc - 1
+   update()
+   i = i + 1
+  end 
+ end
+ if relocateY == true then
+  relocateX = false
+  Ytrav()
+ end
+end
+
+function Ytrav(Yf)
+ if Yf == nil then
+   Yt = Y - Yc
+  else 
+   Yf = Y
+   Yt = Y - Yc
+  end 
+ if Yt == 0 then
+  sleep(.00001)
+ elseif Y+0 < Yc+0 then
+   if norm == 1 then
+    tr()
+   end
+   while norm ~= 4 do
+    tl()
+   end
+   i = 0
+  while i ~= math.abs(Yt) do
+   while turtle.forward() == false do
+    sleep(0.001)
+	diagnostics("Yd")
+   end
+   Yc = Yc - 1
+   update()
+   i = i + 1
+  end
+ else  
+  if norm == 3 then
+   tr()
+  end
+  while norm ~= 2 do
+   tl()
+  end
+  i = 0
+  while i ~= math.abs(Yt) do
+   while turtle.forward() == false do
+    sleep(0.001)
+	diagnostics("Yd")
+   end
+   Yc = Yc + 1
+   update()
+   i = i + 1
+  end
+ end
+ if relocateX == true then
+  relocateY = false
+  Xtrav()
+ end
+end
+
+function Ztrav(Zf)
+  if Zf == nil then
+   Zt = Z - Zc
+  else 
+   Zf = Z
+   Zt = Z - Zc
+  end   
+ if Zt == 0 then
+  sleep(0.001)
+ elseif Z+0 > Zc+0 then
+  i = 0
+  while i ~= math.abs(Zt) do
+   while turtle.up() == false do
+	sleep(0.001)
+	checkfuel()
+   end
+   Zc = Zc + 1
+   update()
+   i = i + 1
+  end
+ elseif Z+0 < Zc+0 then
+  i = 0
+  while i ~= math.abs(Zt) do
+   while turtle.down() == false do
+    sleep(0.001)
+	checkfuel()
+   end
+   Zc = Zc - 1
+   update()
+   i = i + 1
+  end
+ end
+end
