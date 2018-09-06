@@ -1,11 +1,10 @@
 --[[
-IC2 Farmer Turtle api
 GPS Turtle api
 Bryon Olfert
 9/5/2018
 --]]
 
-function diagnostics(val)
+function diagsnostics(val)
  checkfuel()
  if val == "Zd" then
   check = turtle.detectUp()
@@ -245,12 +244,6 @@ function update()
  cfile = fs.open("Norm", "w")
  cfile.write(norm)
  cfile.close()
-end
-
-function write(say)
- term.clear()
- term.setCursorPos(1,1)
- print(say)
 end
 
 function Xtrav(Xf)
