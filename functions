@@ -4,7 +4,7 @@ Bryon Olfert
 9/5/2018
 --]]
 
-function diagsnostics(val)
+function diagnostics(val)
  checkfuel()
  if val == "Zd" then
   check = turtle.detectUp()
