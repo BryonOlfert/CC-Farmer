@@ -5,43 +5,6 @@ Bryon Olfert
 9/5/2018
 --]]
 
-
-function checkfuel()
- if turtle.getFuelLevel() == 0 then
-  turtle.select(3)
-  if turtle.detectUp() == false then
-   turtle.placeUp()
-   turtle.suckUp()
-   turtle.refuel()
-   turtle.digUp()
-  elseif turtle.detect == false then
-   turtle.place()
-   turtle.suck()
-   turtle.refuel()
-   turtle.dig()
-  elseif turtle.detect == false then
-   turtle.placeDown()
-   turtle.suckDown()
-   turtle.refuel()
-   turtle.digDown()
-  else
-   check = true
-   back = norm
-   while check == true do
-	tr()
-	check = turtle.detect()
-   end
-   turtle.place()
-   turtle.suck()
-   turtle.refuel()
-   turtle.dig()
-   while norm ~= back do
-    tr()
-   end
-  end
- end
-end
-
 function diagnostics(val)
  checkfuel()
  if val == "Zd" then
