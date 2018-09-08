@@ -1,0 +1,29 @@
+function writer(x)
+    term.clear()
+    term.setCursorPos(1,1)
+print(x)
+end
+
+if fs.exists("squares") == false then
+	cfile = fs.open("squares", "w")
+	cfile.close()
+	squareList = {}
+else
+	cfile = fs.open("squares","r")
+	squareList = textutils.unserialize(cfile.readAll())
+	cfile.close()
+end
+
+writer("Enter square's X: ")
+local X = read()
+writer("Enter square's Y: ")
+local Y = read()
+writer("Enter square's Z: ")
+local Z = read()
+writer("Enter square's Plant Type: ")
+local Z = read()
+local coors = {X,Y,Z}
+table.insert(squareList,coors)
+cfile = fs.open("squares", "w")
+cfile.write(textutils.serialize(squareList))
+cfile.close()

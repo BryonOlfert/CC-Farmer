@@ -3,74 +3,45 @@
 -Bryon Olfert
 -9/5/2018
 --]]
-
+ 
+ task = "blah"
+ shell.run("gpsFunctions")
  sens = peripheral.wrap("right")
  os.loadAPI("ocs/apis/sensor")
  GPSLOAD()
- task = blah
- term.clear()
- print("I'll take care of the weeds and sucky plants for ya")
- while task ~= "quit" do
- -- this finds the worst parent
-  local worst = {30}
-  local parents = {{243,153},{245,153},{245,155},{245,155}}
-  local targets = sens.getTargets()
-  for name, things in pairs(targets) do
-   local stuff = sens.getTargetDetails(name)
-   for i = 1, 4 do
-    test = false
-	if things.Position.X + Xc == parents[i][1] and things.Position.Z + Yc == parents[i][2] then
-     test = true
+ --print("I'll take care of the weeds and sucky plants for ya")
+ --while task ~= "quit" do
+
+	--loads squares
+	if fs.exists("squares") == false then
+		term.clear()
+		term.setCursorPos(1,1)
+		print("No squares found.. press enter to add square")
+		read()
+		shell.run("addSquare")
+	else
+		cfile = fs.open("squares","r")
+		squareList = textutils.unserialize(cfile.readAll())
+		cfile.close()
 	end
-   
-   if test == true and stuff.Growth + stuff.Gain < worst[1] then
-	 worst = {stuff.Growth + stuff.Gain
-	        ,things.Position.X + Xc
-	        ,things.Position.Z + Yc
-			}
-   end
-   --print(things.Position.X + Xc)
-   --print(things.Position.Z + Yc)
-  end
- end
-  -- this finds the best
-  local work = {}
-  local best = {0}
-  local targets = sens.getTargets()
-  for name, things in pairs(targets) do
-   local stuff = sens.getTargetDetails(name)
-   for i = 1, 4 do
-    test = false
-	if things.Position.X + Xc == parents[i][1] and things.Position.Z + Yc == parents[i][2] then
-     test = true
+	
+	
+	
+	-- looping through each site and performing operations
+	for i = 1, #squareList do
+		X = squareList[i][1]
+		Y = squareList[i][2]
+		
+		
+	local targets = sens.getTargets()
+	for name, things in pairs(targets) do
+		local details = sens.getTargetDetails(name)
+		-- this finds if the targets are within 1 block of the center of a square
+		if things.Position.X + Xc == squareList[i][1] + 1 or things.Position.X + Xc == squareList[i][1] -1 then
+
+		end
 	end
-    if test == false and (stuff.IsWeed == true or stuff.Name ~= "CropTerraWart") then
-	 if stuff.Name == "Crop" then
-	 else
-	  table.insert(work, {things.Position.X + Xc, things.Position.Z + Yc, "bad"}) 
-     end
-   end
-   end
-  end 
- for i = 1, #work do
-  if work[i][3] == "bad" then
-   turtle.select(1)
-   X = work[i][1]
-   Y = work[i][2]
-   Xtrav()
-   Ytrav()
-   turtle.digDown()
-   turtle.select(3)
-   turtle.drop()
-   turtle.select(4)
-   turtle.drop()
-   turtle.select(5)
-   turtle.drop()
-   turtle.select(6)
-   turtle.drop()
-   turtle.select(1)
-   turtle.placeDown()
+
   end
- end  
- sleep(0.001)
-end
+	
+	--end

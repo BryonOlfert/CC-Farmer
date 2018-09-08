@@ -28,7 +28,6 @@ function diagnostics(val)
 		end
 		Xc = Xc - 1
 		tl()
-		update()
 		relocateX = true
 	   end
 	  end
@@ -36,12 +35,10 @@ function diagnostics(val)
      Yc = Yc + 1
      i = i - 1
      tl()
-     update()
      check = turtle.detect()
      end		 
    Xc = Xc + 1
    tl()
-   update()
    check = turtle.detect()
    relocateX = true
   else 
@@ -61,19 +58,16 @@ function diagnostics(val)
       end   
 	 Xc = Xc + 1
 	 tl()
-	 update()
 	 relocateX = true
 	 end
     end   
     Yc = Yc - 1
     i = i - 1
     tl()
-    update()
     check = turtle.detect()
     end		 
    Xc = Xc - 1
    tl()
-   update()
    check = turtle.detect()
    relocateX = true
   end
@@ -100,19 +94,16 @@ function diagnostics(val)
 		Yc = Yc - 1
 		check = false
 		tl()
-		update()
 		relocateY = true
 	 end
     end   
     Xc = Xc - 1
     i = i - 1
     tl()
-    update()
     check = turtle.detect()
     end		 
    Yc = Yc + 1
    tl()
-   update()
    relocateY = true
   else 
    tr()
@@ -133,19 +124,16 @@ function diagnostics(val)
 		Yc = Yc + 1
 		check = false
 		tl()
-		update()
 		relocateY = true
      end
     end   
     Xc = Xc + 1
     i = i - 1
     tl()
-    update()
     check = turtle.detect()
     end		 
    Yc = Yc - 1
    tl()
-   update()
    relocateY = true
   end
   end
@@ -179,18 +167,23 @@ function forward(distance)
 end
 
 function GPSLOAD()
- cfile = fs.open("X", "r")
- Xc = cfile.readAll() + 0
- cfile.close()
- cfile = fs.open("Y", "r")
- Yc = cfile.readAll() + 0
- cfile.close()
- cfile = fs.open("Z", "r")
- Zc = cfile.readAll() + 0
- cfile.close()
- cfile = fs.open("Norm", "r")
- norm = cfile.readAll() + 0
- cfile.close()
+ Xc,Zc,Yc = gps.locate()
+ turtle.forward()
+ X,Z,Y = gps.locate()
+ if Yc ~= Y then
+  if Yc > Y then
+   norm = 4
+  else
+   norm = 2
+  end
+ else
+  if Xc < X then
+   norm = 3
+  else
+   norm = 1
+   end
+ end
+ turtle.back()
 end
 
 
@@ -205,7 +198,6 @@ function tl()
   else
   norm = 4
  end
- update()
 end
 
 function tr()
@@ -219,7 +211,6 @@ function tr()
  else
   norm = 4
  end
- update()
 end
 
 function up(d)
@@ -229,21 +220,6 @@ for i=1, d do
   end
   Zc = Zc + 1
 end
-end
-
-function update() 
- cfile = fs.open("X", "w")
- cfile.write(Xc)
- cfile.close()
- cfile = fs.open("Y", "w")
- cfile.write(Yc)
- cfile.close()
- cfile = fs.open("Z", "w")
- cfile.write(Zc)
- cfile.close()
- cfile = fs.open("Norm", "w")
- cfile.write(norm)
- cfile.close()
 end
 
 function Xtrav(Xf)
@@ -269,7 +245,6 @@ if Xf == nil then
 	diagnostics("Xd")
    end
    Xc = Xc + 1
-   update()
    i = i + 1
   end
  elseif X+0 < Xc+0 then
@@ -286,7 +261,6 @@ if Xf == nil then
 	diagnostics("Xd")
    end
    Xc = Xc - 1
-   update()
    i = i + 1
   end 
  end
@@ -319,7 +293,6 @@ function Ytrav(Yf)
 	diagnostics("Yd")
    end
    Yc = Yc - 1
-   update()
    i = i + 1
   end
  else  
@@ -336,7 +309,6 @@ function Ytrav(Yf)
 	diagnostics("Yd")
    end
    Yc = Yc + 1
-   update()
    i = i + 1
   end
  end
@@ -363,7 +335,6 @@ function Ztrav(Zf)
 	checkfuel()
    end
    Zc = Zc + 1
-   update()
    i = i + 1
   end
  elseif Z+0 < Zc+0 then
@@ -374,7 +345,6 @@ function Ztrav(Zf)
 	checkfuel()
    end
    Zc = Zc - 1
-   update()
    i = i + 1
   end
  end
