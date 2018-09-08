@@ -22,6 +22,7 @@ else
 end
 local work = {}
 while true do
+	isActionRequired = false
 	-- looping through each site and performing operations
 	for i = 1, #squareList do
 		local targets = sens.getTargets()
@@ -31,12 +32,22 @@ while true do
 			if math.sqrt((things.Position.X + Xc - squareList[i][1])^2 + (things.Position.Z + Yc - squareList[i][2])^2) < 1.5 then
 				if details.Name == "CropWeed" then
 					table.insert(work, {things.Position.X + Xc, things.Position.Z + Yc})
+					isActionRequired = true
 				end
-				if squareList[i][3] == true then
-					
-				end
+				
 			end
 		end
 	end
-	
-end	
+	if isActionRequired == true then
+		modem.transmit(60,60,"check")
+		modem.open(60)
+		p1,p2,p3,p4,p5 = os.pullEvent("modem_message")
+		while p5 ~= "check" do
+			p1,p2,p3,p4,p5 = os.pullEvent("modem_message")
+		end
+		modem.transmit(p4,p4,work)
+	end
+	while p5 ~= "done" do
+		p1,p2,p3,p4,p5 = os.pullEvent("modem_message")
+	end
+end
