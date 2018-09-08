@@ -4,18 +4,19 @@
 -9/5/2018
 --]]
  
- task = "blah"
- shell.run("gpsFunctions")
- GPSLOAD()
- local modem = peripheral.wrap("left")
- modem.open(60)
- 
+shell.run("gpsFunctions")
+GPSLOAD()
+local modem = peripheral.wrap("left")
+modem.open(60)
+
+--Gets targets from farm manager
 while true do
 	local p1,p2,p3,p4,p5 = os.pullEvent("modem_message")
 	if p5 == "check" then
 		modem.transmit(p4,p4,"check")
 		local p1,p2,p3,p4,p5 = os.pullEvent("modem_message")
 		local work = p5
+		--loops through list of targets
 		for i = 1, #work do
 			X = work[i][1]
 			Y = work[i][2]
