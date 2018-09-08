@@ -3,7 +3,7 @@
 -Bryon Olfert
 -9/7/2018
 --]]
- 
+ local whitelist ={}
  sens = peripheral.wrap("bottom")
  modem = peripheral.wrap("left")
  os.loadAPI("ocs/apis/sensor")
@@ -28,9 +28,12 @@ while true do
 		for name, things in pairs(targets) do
 			local details = sens.getTargetDetails(name)
 			-- this finds if the targets are within 1 block of the center of a square
-			if math.sqrt((things.Position.X + Xc - squareList[i][1])^2 + (things.Position.Z + Yc - squareList[i][2])^2) < 2 then
-				if details.Name == "CropPotato" then
+			if math.sqrt((things.Position.X + Xc - squareList[i][1])^2 + (things.Position.Z + Yc - squareList[i][2])^2) < 1.5 then
+				if details.Name == "CropWeed" then
 					table.insert(work, {things.Position.X + Xc, things.Position.Z + Yc})
+				end
+				if squareList[i][3] == true then
+					
 				end
 			end
 		end
