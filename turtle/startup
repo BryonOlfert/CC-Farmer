@@ -15,12 +15,14 @@ while true do
 	if p5 == "check" then
 		modem.transmit(p4,p4,"check")
 		local p1,p2,p3,p4,p5 = os.pullEvent("modem_message")
-		X = p5
-		p1,p2,p3,p4,p5 = os.pullEvent("modem_message")
-		Y = p5
-		Xtrav()
-		Ytrav()
-		turtle.digDown()
+		local work = p5
+		for i = 1, #work do
+			X = work[i][1]
+			Y = work[i][2]
+			Xtrav()
+			Ytrav()
+			turtle.digDown()
+		end
 	end
 		X = 316
 		Y = -210

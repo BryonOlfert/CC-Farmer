@@ -4,27 +4,23 @@
 -9/7/2018
 --]]
  
- task = "blah"
  sens = peripheral.wrap("bottom")
  modem = peripheral.wrap("left")
  os.loadAPI("ocs/apis/sensor")
  Xc,Zc,Yc = gps.locate()
- --print("I'll take care of the weeds and sucky plants for ya")
- --while task ~= "quit" do
-
-	--loads squares
-	if fs.exists("squares") == false then
-		term.clear()
-		term.setCursorPos(1,1)
-		print("No squares found.. press enter to add square")
-		read()
-		shell.run("addSquare")
-	else
-		cfile = fs.open("squares","r")
-		squareList = textutils.unserialize(cfile.readAll())
-		cfile.close()
-	end
-	
+--loads squares
+if fs.exists("squares") == false then
+	term.clear()
+	term.setCursorPos(1,1)
+	print("No squares found.. press enter to add square")
+	read()		
+	shell.run("addSquare")
+else
+	cfile = fs.open("squares","r")
+	squareList = textutils.unserialize(cfile.readAll())
+	cfile.close()
+end
+local work = {}
 while true do
 	-- looping through each site and performing operations
 	for i = 1, #squareList do
@@ -34,22 +30,10 @@ while true do
 			-- this finds if the targets are within 1 block of the center of a square
 			if math.sqrt((things.Position.X + Xc - squareList[i][1])^2 + (things.Position.Z + Yc - squareList[i][2])^2) < 2 then
 				if details.Name == "CropPotato" then
-					modem.transmit(60,60, "check")
-					modem.open(60)
-					local p1,p2,p3,p4,p5 = os.pullEvent("modem_message")
-					while p5 ~= "check" do
-						local p1,p2,p3,p4,p5 = os.pullEvent("modem_message")
-					end
-					modem.transmit(p4,p4,things.Position.X + Xc)
-					sleep(0.1)
-					modem.transmit(p4,p4,things.Position.Z + Yc)
-					local p1,p2,p3,p4,p5 = os.pullEvent("modem_message")
-					while p5 ~= "done" do
-						print("waaaait")
-						local p1,p2,p3,p4,p5 = os.pullEvent("modem_message")
-					end
+					table.insert(work, {things.Position.X + Xc, things.Position.Z + Yc})
 				end
 			end
 		end
 	end
+	
 end	
