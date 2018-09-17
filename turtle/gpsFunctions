@@ -168,7 +168,9 @@ end
 
 function GPSLOAD()
  Xc,Zc,Yc = gps.locate()
- turtle.forward()
+ while turtle.forward() == false do
+ 	tr()
+end
  X,Z,Y = gps.locate()
  if Yc ~= Y then
   if Yc > Y then
